@@ -1,4 +1,3 @@
-
 import pyttsx3
 import speech_recognition as sr
 import pyaudio
@@ -64,6 +63,7 @@ def continue_command():
     return store
 
 def run_alexa():
+    min = 0
     try:
         command=give_command()
         print(command)
@@ -85,21 +85,25 @@ def run_alexa():
 
             elif "information on" in command:
                 people=command[(command.index("information on")+len("information on"))+1:]
-                
-                print(type(people))
                 information=wikipedia.summary(people,1)
-                print(wikipedia.summary(people,1))
                 talk(information)
 
-            elif ("note" or "make a note") in command:
-                    talk("What should i write, senpai")
+            elif "good morning" in command:
+                say = ["Good Morning! How are you Senpai","Good Morning!, have a nice day Senpai","Good Morning! I am at your service Senpai"]
+                max = len(say)-1
+                talkformat=random.randint(min, max)
+                talk(say[talkformat])
+            elif "note" in command or "make a note" in command:
+                    say = ["What should i write?, senpai!","What should i Note Down?, senpai!","Senpai ,Im noting down?"]
+                    max = len(say)-1
+                    talkformat=random.randint(min, max)
+                    talk(say[talkformat])
                     note = give_command()
                     file = open('note.txt', 'w')
                     talk("senpai, Should i include date and time")
-                    snfm = continue_command()
-                    print(snfm+"hi")
-                    if 'yes' in snfm or 'sure' in snfm:
-                        strTime = datetime.datetime.now().strftime("%H:%M:%S")
+                    reply = continue_command()
+                    if 'yes' in reply or 'sure' in reply or "yea" in reply or "ok" in reply or "alright" in reply or "yeah" in reply or "cool" in reply or "okay" in reply:
+                        strTime = datetime.datetime.now().strftime("%#I:%M %p")
                         file.write(strTime)
                         file.write(" :- ")
                         file.write(note)
