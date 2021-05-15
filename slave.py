@@ -21,6 +21,7 @@ import os
 #import winshell
 #import pyjokes
 #import feedparser
+import bs4
 import smtplib
 import ctypes
 import time
@@ -83,10 +84,11 @@ def run_alexa():
                 talk(date)
 
             elif "information on" in command:
-                search=command[(command.index("information on")+len("information on"))+1:]
-                print(search+"test")
-                information=wikipedia.summary("search")
-                print(information)
+                people=command[(command.index("information on")+len("information on"))+1:]
+                
+                print(type(people))
+                information=wikipedia.summary(people,1)
+                print(wikipedia.summary(people,1))
                 talk(information)
 
             elif ("note" or "make a note") in command:
