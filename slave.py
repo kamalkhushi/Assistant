@@ -81,8 +81,14 @@ def run_alexa():
                 date=datetime.datetime.now().strftime("%B %d %Y")
                 print(date)
                 talk(date)
-            elif ('tell me' or 'say me' or "who the heck is" or "info" or "information") in command:
-                print("")
+
+            elif "information on" in command:
+                search=command[(command.index("information on")+len("information on"))+1:]
+                print(search+"test")
+                information=wikipedia.summary("search")
+                print(information)
+                talk(information)
+
             elif ("note" or "make a note") in command:
                     talk("What should i write, senpai")
                     note = give_command()
