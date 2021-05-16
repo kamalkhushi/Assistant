@@ -132,6 +132,11 @@ def run_alexa():
             elif 'shutdown system' in command or 'turn off the system' in command or 'shutdown' in command:
                 talk("Hold On a Sec ! Your system is on its way to shut down")
                 os.system("shutdown /s /t 1")
+            elif 'restart pc' in command or 'reboot pc' in command or 'restart the computer' in command:
+                talk("Hold On a Sec ! Your system is on its way to restart")
+                os.system("shutdown /r /t 1")
+            elif "lock my pc" in command or "lock the pc" in command :
+                ctypes.windll.user32.LockWorkStation()
     except:
         pass    
 
