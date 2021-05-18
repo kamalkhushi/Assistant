@@ -30,6 +30,7 @@ import spotipy
 import spotipy.util as util
 from json.decoder import JSONDecodeError
 from gogoanimeapi import gogoanime as anime
+import sphinx
 
 listener=sr.Recognizer()
 speaker=pyttsx3.init()
@@ -49,7 +50,7 @@ def give_command():
     try:
         with sr.Microphone() as mic:
             voice = listener.listen(mic)
-            command=listener.recognize_google(voice)
+            command=listener.recognize_google(voice,language='en-in')
             command = command.lower()        
     except:
         pass
@@ -220,27 +221,29 @@ def run_alexa():
             
 
             #gogoanime
-            elif "stream" in command:
-                command= command[(command.index("stream")+len("stream"))+1:]
-                anime_search = anime.get_search_results(query=command)
-                for title in anime_search:
-                    title=title.get('animeid')
-                    break
-                talk("which episode of "+command+" you want to play senpai?")
-                reply=continue_command()
-                anime_link = anime.get_episodes_link(animeid=title, episode_num=int(reply))
-                clarity_list=[]
-                for x in anime_link:
-                    clarity_list.append(x)
-                gogourl=""
-                for x in anime_link["(HDP-mp4)"]:
-                    gogourl=gogourl+x
-                talk("Playing episode "+reply+"of"+command)
-                Media = Instance.media_new(gogourl)
-                Media.get_mrl()
-                player.set_media(Media)
-                player.play()
-    
+            elif "stream" in command or "gogoanime" in command:
+                try:
+                    command= command[(command.index("stream")+len("stream"))+1:]
+                    anime_search = anime.get_search_results(query=command)
+                    for title in anime_search:
+                        title=title.get('animeid')
+                        break
+                    talk("which episode of "+command+" you want to play senpai?")
+                    reply=continue_command()
+                    anime_link = anime.get_episodes_link(animeid=title, episode_num=int(reply))
+                    clarity_list=[]
+                    for x in anime_link:
+                        clarity_list.append(x)
+                    gogourl=""
+                    for x in anime_link["(HDP-mp4)"]:
+                        gogourl=gogourl+x
+                    talk("Playing episode "+reply+"of"+command)
+                    Media = Instance.media_new(gogourl)
+                    Media.get_mrl()
+                    player.set_media(Media)
+                    player.play()
+                except:
+                    talk("Sorry Senpai,Coudnt find the episode!")
     except:
         pass    
 while(True):
